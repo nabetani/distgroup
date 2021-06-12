@@ -1,0 +1,11 @@
+file 'intermediates/sample.txt' => ['src/samplemaker.rb'] do
+  FileUtils.mkdir_p( "intermediates" )
+  ruby "src/samplemaker.rb"
+end
+
+file 'pub/index.html' => ['src/main.js', 'src/index.haml', 'intermediates/sample.txt'] do
+  FileUtils.mkdir_p( "pub" )
+  sh "haml -I src src/index.haml > pub/index.html"
+end
+
+task :default => 'pub/index.html'

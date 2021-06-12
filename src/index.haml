@@ -1,0 +1,105 @@
+!!!
+-require "base64"
+-relative_path=->(x){ File.join(File.split(__FILE__).first,x) }
+-base64_file=->(x){s=File.open( relative_path[x], "r:ascii-8bit", &:read );Base64::encode64(s)}
+-import_file=->(x){File.open( relative_path[x], &:read )}
+%script=import_file["main.js"]
+:css
+  textarea{
+    width:calc(100vw - 5em);
+    font-size:4pt;
+  }
+  #src{
+    height:calc(100vh / 3);
+  }
+  #sheet{
+    width:calc(100vw - 5em);
+  }
+  .hidden{
+    display: none;
+  }
+  #result{
+  }
+  #usage{
+    border: solid #999 1px;
+    background-color: #eee;
+    display:none;
+  }
+
+%h1 分散グループ分け支援
+%section
+  %h2 使い方と計算
+  %p
+    %input#show_usage{ type:"radio", name:"show_usage", checked:false, onclick:"showhide_usage()"}
+    %label{ for:"show_usage"} 表示
+    %input#hide_usage{ type:"radio", name:"show_usage", checked:true, onclick:"showhide_usage()"}
+    %label{ for:"hide_usage"} 非表示
+  %section#usage
+    %section
+      %h3 データ作成
+      %p
+        雰囲気はこんな感じ。
+      %p
+        %img#sheet{ src:"data:image/png;base64,"+base64_file["sheetimage.png"]}
+      %ul
+        %li
+          1行目は生成するグループに入れるメンバのリスト。左端のセルは無視する。
+        %li 
+          2行目以降は、過去のグループのリスト。
+          %ul
+            %li 1列目はメモ。日付やそのグループの趣旨を書くために使うことを想定。
+            %li 2列目は、その行のグループの重み。大きいほどこのグループ分けを重視する。
+            %li 3列目以降はグループ分け。グループの区切りは空のセル。
+    %section
+      %h3 データを貼り付ける
+      %p
+        Excel などで作った情報を下記の「組分けのための情報」に コピー＆ペースト で貼り付ける
+    %section
+      %h3 グループ分け生成
+      %p
+        何グループに分けたいのかを「グループ数」の欄に入れたあとで「生成」ボタンを押す。
+    %section
+      %h3 Excel などに戻す
+      %p
+        「クリップボードにコピー」ボタンを押してから Excel にペースト。
+        %br
+        3列目以降にグループが並ぶ。グループの境目は空のセル。
+    %section
+      %h3 計算内容
+      %p
+        ランダムにグループ分けを試行回数で指定された回数行う。
+        %br
+        スコアが最も小さいグループを出力する。
+        %br
+        スコアの計算は、作られたグループ内に「過去のグループ」で一緒になったことがあったら、そのグループの重み付けを加算する。という内容。
+    %section
+      %h3 補足
+      %p
+        計算はすべてブラウザ内で行われ、通信は一切しない。
+        %br
+        必要であれば、HTML をローカルにコピーして、ローカルで実行することもできる。
+%p
+  %label{ for:"trial_count"}
+    試行回数
+  %input#trial_count{type:"number", min:100, step:100, value:10000 }
+%p
+  %label{ for:"group_count"}
+    グループ数
+  %input#group_count{type:"number", min:2, step:1, value:5 }
+%p
+  %button{ onclick:"input_sample()"}
+    サンプルテキストを入れる
+%p
+  %textarea.hidden#sample=import_file["../intermediates/sample.txt"]
+  %label{ for:"src" } 組分けのための情報
+  %br
+  %textarea#src
+%p
+  %button{ onclick:"makeNewG()"}
+    生成
+
+%textarea#result
+
+%p
+  %button{ onclick:"copy()"}
+    クリップボードにコピー
