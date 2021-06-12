@@ -1,1 +1,21 @@
 !!!
+-relative_path=->(x){ File.join(File.split(__FILE__).first,x) }
+-import_file=->(x){File.open( relative_path[x], &:read )}
+%script=import_file["main.js"]
+:css
+  textarea{
+    width:calc(100vw - 5em);
+    font-size:4pt;
+  }
+  #src{
+    height:calc(100vh / 2);
+  }
+  #result{
+  }
+
+%h1 分散グループ分け支援
+
+%textarea#src=import_file["sample.txt"]
+%textarea#result
+:javascript
+  makeNewG();
