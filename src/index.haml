@@ -10,6 +10,9 @@
   #src{
     height:calc(100vh / 2);
   }
+  .hidden{
+    display: none;
+  }
   #result{
   }
 
@@ -18,13 +21,17 @@
 %p
   %label{ for:"trial_count"}
     試行回数
-  %input#trial_count{type:"number", min:100, step:100, value:1000 }
+  %input#trial_count{type:"number", min:100, step:100, value:10000 }
 %p
   %label{ for:"group_count"}
     グループ数
   %input#group_count{type:"number", min:2, step:1, value:5 }
 %p
-  %textarea#src=import_file["../intermediates/sample.txt"]
+  %button{ onclick:"input_sample()"}
+    サンプルテキストを入れる
+%p
+  %textarea.hidden#sample=import_file["../intermediates/sample.txt"]
+  %textarea#src
 %p
   %button{ onclick:"makeNewG()"}
     生成

@@ -146,3 +146,8 @@ const copy = ()=>{
         navigator.clipboard.writeText(str);
     }
 };
+
+const input_sample = ()=>{
+    document.getElementById("src").value = document.getElementById("sample").value;
+
+}
