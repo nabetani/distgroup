@@ -60,6 +60,11 @@ const getWeights = (g) => {
     return w;
 };
 
+const elementInt= (id)=>{
+    const e = document.getElementById(id);
+    return parseInt(e.value);
+}
+
 const parseInput = () => {
     const src = document.getElementById("src").value.split(/[\r\n]+/)
     const members = getMembers(src);
@@ -68,8 +73,8 @@ const parseInput = () => {
         members: members,
         names: names,
         groups: groups,
-        trial: 5000,
-        gcount: 4,
+        trial: elementInt("trial_count"),
+        gcount: elementInt("group_count"),
     };
     return input;
 };
@@ -133,4 +138,11 @@ const makeNewG = () => {
     const candidate = getCandidates(input)[0];
     const s = stringize(candidate,input);
     document.getElementById("result").value = "\t\t"+s;
+};
+
+const copy = ()=>{
+    const str = document.getElementById("result").value;
+    if(navigator.clipboard){
+        navigator.clipboard.writeText(str);
+    }
 };

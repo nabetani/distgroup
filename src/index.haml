@@ -15,7 +15,22 @@
 
 %h1 分散グループ分け支援
 
-%textarea#src=import_file["../intermediates/sample.txt"]
+%p
+  %label{ for:"trial_count"}
+    試行回数
+  %input#trial_count{type:"number", min:100, step:100, value:1000 }
+%p
+  %label{ for:"group_count"}
+    グループ数
+  %input#group_count{type:"number", min:2, step:1, value:5 }
+%p
+  %textarea#src=import_file["../intermediates/sample.txt"]
+%p
+  %button{ onclick:"makeNewG()"}
+    生成
+
 %textarea#result
-:javascript
-  makeNewG();
+
+%p
+  %button{ onclick:"copy()"}
+    クリップボードにコピー
