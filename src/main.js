@@ -29,7 +29,7 @@ const collectGroups = (src, members) => {
         o.push({ w: w, m: e.map((n) => nameToIx[n]) });
     };
     for (const line of src.slice(1)) {
-        let split = line.split(/\t\t+/);
+        let split = line.split(/\t(\s*\t)+/);
         let w = null;
         for (const etext of split) {
             const e = etext.split("\t").map((x) => x.trim()).filter((x) => 0 < x.length)
@@ -126,17 +126,20 @@ const getCandidates = (input)=>{
     return clist;
 };
 
-const stringize = (c,i)=>{
-    console.log(c);
+const stringize = (c,i,s0,s1)=>{
     return c.m.map( (g)=>{
-        return g.map( (ix)=>i.names[ix] ).join("\t");
-    }).join("\t\t");
+        return g.map( (ix)=>i.names[ix] ).join(s0);
+    }).join(s1);
 };
 
 const makeNewG = () => {
     const input = parseInput();
     const candidate = getCandidates(input)[0];
-    const s = stringize(candidate,input);
+    const s = stringize(candidate,input,"\t", "\t\t");
+    console.log( {
+        score:candidate.score,
+        groups:stringize(candidate,input,", ", " / "),
+    }) 
     document.getElementById("result").value = "\t\t"+s;
 };
 
@@ -149,5 +152,10 @@ const copy = ()=>{
 
 const input_sample = ()=>{
     document.getElementById("src").value = document.getElementById("sample").value;
+}
 
+const showhide_usage = ()=>{
+    const usage = document.getElementById("usage");
+    const show = document.getElementById("show_usage");
+    usage.style.display = show.checked ? "block" : "none";
 }

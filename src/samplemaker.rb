@@ -3,7 +3,6 @@ require "date"
 LIST = DATA.to_a.map(&:strip)
 
 def line(memo,w,n)
-  p [memo,w,n]
   list = LIST.dup.shuffle
   c = n.map{ |nn| 
     u,list = list[0,nn], list.drop(nn)
@@ -18,11 +17,11 @@ end
 
 File.open(rel("../intermediates/sample.txt"), "w") do |f|
   f.puts(["members", *LIST].join("\t"))
-  [
-    [ "ほげ", 1, [3] ],
-    [ "ふが", 1, [3,2,2] ],
-  ].each do |memo,w,n|
-    f.puts( line(memo,w,n) )
+  LIST.group_by{ |x| x.split("　").first }.each do |k,v|
+    next if v.size<2
+    memo = k+"家"
+    w = 1
+    f.puts( [memo,w,*v].join("\t"))
   end
   10.downto(0) do |ix|
     memo = (Date.today - (ix*14)).to_s
@@ -34,18 +33,19 @@ File.open(rel("../intermediates/sample.txt"), "w") do |f|
 end
 
 __END__
-阿倍　仲麿
-小野　小町
-文屋　康秀
-凡河内　躬恒
-壬生　忠岑
-坂上　是則
-春道　列樹
-紀　友則
-藤原　興風
 紀　貫之
-文屋　朝康
-平　兼盛
+紀　友則
+源　兼昌
+源　重之
+源　俊頼
+春道　列樹
+小野　小町
 壬生　忠見
+壬生　忠岑
 清原　元輔
-曽禰　好忠
+藤原　基俊
+藤原　義孝
+藤原　興風
+文屋　康秀
+文屋　朝康
+凡河内　躬恒
