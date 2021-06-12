@@ -1,0 +1,6 @@
+file 'pub/index.html' => 'src/index.haml' do
+  FileUtils.mkdir( "pub" )
+  sh "haml -I src src/index.haml > pub/index.html"
+end
+
+task :default => 'pub/index.html'
